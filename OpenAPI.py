@@ -21,7 +21,7 @@ scrapper = scrape.Scrape()
 class PaginationSchema(Schema):
     nextUrl = fields.Str(metadata={"description": "URL to call for the next page, only available if next is available"})
     prevUrl = fields.Str(metadata={"description": "URL to call for the prev page, only available if prev is available"})
-    total = fields.Str(metadata={"description": "The total number of data available"})
+    total = fields.Int(metadata={"description": "The total number of data available"})
 
 class URLSchema(Schema):
     id = fields.Int(dump_only=True, metadata={"description": "The primary key of this field"})
