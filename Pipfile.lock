@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f30c955f298f67e78c5ba38d3d5f451b5a4d522687c701b8a5c61717ebaa229e"
+            "sha256": "a7d8b0dc562d39d49fcc22d4eca248b512f4d856720ca3f162e6995d6bda254e"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -23,6 +23,14 @@
             ],
             "index": "pypi",
             "version": "==5.1.0"
+        },
+        "furl": {
+            "hashes": [
+                "sha256:a2c6adb472fc5faba2e18b6c28b83464b80201f168fd10b81997895a7cb5d5a6",
+                "sha256:f7dba33eafbee7dbc83963534b25e72f816cced48ac53191ee60bfcc62933918"
+            ],
+            "index": "pypi",
+            "version": "==2.1.2"
         },
         "marshmallow": {
             "hashes": [
@@ -54,6 +62,13 @@
             ],
             "index": "pypi",
             "version": "==8.0.26"
+        },
+        "orderedmultidict": {
+            "hashes": [
+                "sha256:04070bbb5e87291cc9bfa51df413677faf2141c73c61d2a5f7b26bea3cd882ad",
+                "sha256:43c839a17ee3cdd62234c47deca1a8508a3f2ca1d0678a3bf791c87cf84adbf3"
+            ],
+            "version": "==1.0.1"
         },
         "protobuf": {
             "hashes": [
