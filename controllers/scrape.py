@@ -1,4 +1,15 @@
+from models.scrape import scrape as scp_model
+from models.response import response as model_response
+from models.pagination import pagination as model_pagination
+
 class Scrape(object):
+    currentUrl = None
+    event = None
+
+    def __init__(self, event, currentUrl):
+        self.event = event
+        self.currentUrl = currentUrl
+
 
     def create(self):
         """Scrapes an URL, stores and return the file information and timestamp
@@ -64,6 +75,8 @@ class Scrape(object):
         """
         ...
 
+    def get_model(self):
+        return scp_model()
 
     def lists(self):
 
@@ -125,7 +138,30 @@ class Scrape(object):
                                 value: {"msg": "An error occurred. Please try again"}
 
         """
-        ...
+        response = model_response()
+
+        try:
+            model = self.get_model()
+            page_number = 0 if 'page' not in self.event else self.event['page']
+
+            model_list = model.lists({
+                'query': ' LEFT JOIN url u on a.url_id=u.id' if 'url' not in self.event else ' LEFT JOIN url u on a.url_id=u.id WHERE url.url = %s',
+                'fields': 'a.url_shorten, a.url_content, a.url_timestamp,u.url, a.url_id, u.id as parent_url_id',
+                'limit': [(page_number - 1) * model_pagination.limit, model_pagination.limit],
+                'parameter': [] if 'url' not in self.event else [self.event['url']]
+            })
+            response.data = model_list[1].__str__()
+
+            response.status = 'success'
+            response.pagination = model_pagination.link(self.currentUrl, page_number, model_list[0]['total'] if model_list[0] is not None else 0).__dict__
+        except Exception as error:
+            raise Exception(error)
+            response.status = 'error'
+            response.msg = error.__str__()
+
+        return response
+
+
 
     def list(self):
         """Return one scrapped version from a particular URL
@@ -186,4 +222,24 @@ class Scrape(object):
                                 summary: Server error
                                 value: {"msg": "An error occurred. Please try again"}
         """
-        ...
+        response = model_response()
+        try:
+            model = self.get_model()
+
+            if 'id' not in self.event:
+                raise ValueError('Value URL id is required')
+
+            response.data = model.list({
+                'query': ' LEFT JOIN url u on a.url_id=u.id WHERE u.id = %s',
+                'fields': 'a.url_shorten, a.url_content, a.url_timestamp,u.url, a.url_id, u.id as parent_url_id',
+                'parameter': [self.event['id']]
+            })
+
+            response.status = 'success'
+        except Exception as error:
+            response.status = 'error'
+            response.msg = error.__str__()
+        return response
+
+
+
