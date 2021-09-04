@@ -27,8 +27,10 @@ class pagination:
     @staticmethod
     def link(url, page, total):
         pgn = pagination(page, total)
-        pgn.nextPage = furl(url).add({'page': pgn.next}).__str__()
-        pgn.prevPage = furl(url).add({'page': pgn.prev}).__str__()
+        if pgn.next != 0:
+            pgn.nextPage = furl(url).add({'page': pgn.next}).__str__()
+        if pgn.prev != 0:
+            pgn.prevPage = furl(url).add({'page': pgn.prev}).__str__()
         return pgn
 
 

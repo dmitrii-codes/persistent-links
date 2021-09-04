@@ -37,7 +37,8 @@ print(handler(
     {
         'httpMethod': 'GET',
             'queryStringParameters': {
-                'url': 'https://google.com'
+                'url': 'https://google.com',
+                'page': '2'
             }
 
     }, {}))
