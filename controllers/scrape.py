@@ -143,15 +143,17 @@ class Scrape(object):
         response = model_response()
 
         try:
+
+
             model = self.get_model()
-            page_number = 0 if 'page' not in self.event else self.event['page']
+            page_number = int(self.event['page']) if 'page' in self.event and self.event['page'] is not None else 1
             model_list = model.lists({
                 'query': ' LEFT JOIN url u on a.url_id=u.id WHERE u.url like %s' if 'url' in self.event and self.event['url'] is not None else ' LEFT JOIN url u on a.url_id=u.id' ,
-                'fields': 'a.url_shorten, a.url_content, UNiX_TIMESTAMP(a.url_timestamp) as url_timestamp,u.url, a.url_id, u.id as parent_url_id',
+                'fields': 'a.url_shorten, a.url_content, UNiX_TIMESTAMP(a.url_timestamp) as url_timestamp,u.url, a.id as url_id, u.id as parent_url_id',
                 'limit': [(page_number - 1) * model_pagination.limit, model_pagination.limit],
                 'parameter':  [ '%' + self.event['url'] + '%'] if 'url' in self.event and self.event['url'] is not None else []
             })
-            response.data = model_list[1].__str__()
+            response.data = model_list[1]
 
             response.status = 'success'
             response.pagination = model_pagination.link(self.currentUrl, page_number, model_list[0]['total'] if model_list[0] is not None else 0).__dict__
@@ -232,10 +234,10 @@ class Scrape(object):
                 raise ValueError('Value URL id is required')
 
             response.data = model.list({
-                'query': ' LEFT JOIN url u on a.url_id=u.id WHERE u.id = %s',
-                'fields': 'a.url_shorten, a.url_content, UNIX_TIMESTAMP(a.url_timestamp) as url_timestamp,u.url, a.url_id, u.id as parent_url_id',
+                'query': ' LEFT JOIN url u on a.url_id=u.id WHERE a.id = %s',
+                'fields': 'a.url_shorten, a.url_content, UNIX_TIMESTAMP(a.url_timestamp) as url_timestamp,u.url, a.id as url_id, u.id as parent_url_id',
                 'parameter': [self.event['id']]
-            }).__str__()
+            })
 
             response.status = 'success'
         except Exception as error:

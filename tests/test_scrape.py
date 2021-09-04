@@ -1,5 +1,4 @@
 import unittest
-import ast
 from unittest.mock import MagicMock
 from controllers.scrape import Scrape
 from models.scrape import scrape as scp_model
@@ -34,7 +33,7 @@ class test_scrape(unittest.TestCase):
             'parent': self.database_content['parent_url_id']
         })
         scrape_list = self.scrape.list()
-        self.assertEqual(ast.literal_eval(scrape_list.data)['id'], self.database_content['url_id'])
+        self.assertEqual(scrape_list.data['id'], self.database_content['url_id'])
 
     def test_list_empty_value(self):
         self.scrape.get_model = scp_model
@@ -54,7 +53,7 @@ class test_scrape(unittest.TestCase):
         scrape_lists = self.scrape.lists()
         self.assertEqual(scrape_lists.pagination['total'], 22)
         self.assertEqual(scrape_lists.pagination['nextPage'], '/scrape?page=2')
-        self.assertEqual(scrape_lists.pagination['prevPage'], '/scrape?page=0')
+        self.assertTrue('prevPage' not in scrape_lists.pagination)
         self.assertEqual(scrape_lists.pagination['current'], 1)
         self.assertGreater(len(scrape_lists.data), 0)
 
@@ -70,7 +69,7 @@ class test_scrape(unittest.TestCase):
         }]))
         scrape_lists = self.scrape.lists()
         self.assertEqual(scrape_lists.pagination['total'], 2)
-        self.assertEqual(scrape_lists.pagination['nextPage'], '/scrape?page=0')
-        self.assertEqual(scrape_lists.pagination['prevPage'], '/scrape?page=0')
+        self.assertTrue('nextPage' not in scrape_lists.pagination)
+        self.assertTrue('prevPage' not in scrape_lists.pagination)
         self.assertEqual(scrape_lists.pagination['current'], 1)
         self.assertGreater(len(scrape_lists.data), 0)
