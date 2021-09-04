@@ -117,10 +117,12 @@ class Scrape(object):
                                 $ref: '#/components/schemas/URL'
                         pagination:
                             $ref: '#/components/schemas/Pagination'
+                        status:
+                            type: string
                   examples:
                     success:
                         summary: Sample success response
-                        value: {"message": "success", "data": [{"id": 1, "path": "https://my-bucket.s3.us-west-2.amazonaws.com/google.com/", "timestamp": 1629246484, "url": "https://google.com", "parent": 0}], "pagination": {"nextUrl": "https://persistantlink.sample-url.com/scrape?page=3", "prevUrl": "https://persistantlink.sample-url.com/scrape?page=1", "total": 10}}
+                        value: {"status": "success", "data": [{"id": 1, "path": "https://my-bucket.s3.us-west-2.amazonaws.com/google.com/", "timestamp": 1629246484, "url": "https://google.com", "parent": 0}], "pagination": {"nextUrl": "https://persistantlink.sample-url.com/scrape?page=3", "prevUrl": "https://persistantlink.sample-url.com/scrape?page=1", "total": 20, "next": 3, "prev": 1, "limit": 20}}
 
             500:
                 description: An error occurred
@@ -143,20 +145,19 @@ class Scrape(object):
         try:
             model = self.get_model()
             page_number = 0 if 'page' not in self.event else self.event['page']
-
             model_list = model.lists({
-                'query': ' LEFT JOIN url u on a.url_id=u.id' if 'url' not in self.event else ' LEFT JOIN url u on a.url_id=u.id WHERE url.url = %s',
-                'fields': 'a.url_shorten, a.url_content, a.url_timestamp,u.url, a.url_id, u.id as parent_url_id',
+                'query': ' LEFT JOIN url u on a.url_id=u.id WHERE u.url like %s' if 'url' in self.event and self.event['url'] is not None else ' LEFT JOIN url u on a.url_id=u.id' ,
+                'fields': 'a.url_shorten, a.url_content, UNiX_TIMESTAMP(a.url_timestamp) as url_timestamp,u.url, a.url_id, u.id as parent_url_id',
                 'limit': [(page_number - 1) * model_pagination.limit, model_pagination.limit],
-                'parameter': [] if 'url' not in self.event else [self.event['url']]
+                'parameter':  [ '%' + self.event['url'] + '%'] if 'url' in self.event and self.event['url'] is not None else []
             })
             response.data = model_list[1].__str__()
 
             response.status = 'success'
             response.pagination = model_pagination.link(self.currentUrl, page_number, model_list[0]['total'] if model_list[0] is not None else 0).__dict__
         except Exception as error:
-            raise Exception(error)
-            response.status = 'error'
+            response.status = 'An error occurred. Please try again'
+            response.statusCode = 500
             response.msg = error.__str__()
 
         return response
@@ -188,7 +189,7 @@ class Scrape(object):
                     success:
                         summary: Sample success response
                         value:
-                            {"id": 1, "path": "https://my-bucket.s3.us-west-2.amazonaws.com/google.com/", "timestamp": 1629246484, "url": "https://google.com", "parent": 0, "message": "success"}
+                            {"data": {"id": 1, "path": "https://my-bucket.s3.us-west-2.amazonaws.com/google.com/", "timestamp": 1629246484, "url": "https://google.com", "parent": 0}, "status":"success", "message": "success"}
 
             400:
                 description: Invalid request, Invalid ID provided
@@ -227,16 +228,19 @@ class Scrape(object):
             model = self.get_model()
 
             if 'id' not in self.event:
+                response.statusCode = 400
                 raise ValueError('Value URL id is required')
 
             response.data = model.list({
                 'query': ' LEFT JOIN url u on a.url_id=u.id WHERE u.id = %s',
-                'fields': 'a.url_shorten, a.url_content, a.url_timestamp,u.url, a.url_id, u.id as parent_url_id',
+                'fields': 'a.url_shorten, a.url_content, UNIX_TIMESTAMP(a.url_timestamp) as url_timestamp,u.url, a.url_id, u.id as parent_url_id',
                 'parameter': [self.event['id']]
-            })
+            }).__str__()
 
             response.status = 'success'
         except Exception as error:
+            if response.statusCode == 200:
+                response.statusCode = 500
             response.status = 'error'
             response.msg = error.__str__()
         return response
