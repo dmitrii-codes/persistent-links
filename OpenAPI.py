@@ -16,7 +16,7 @@ spec = APISpec(
     plugins=[DocPlugin(), MarshmallowPlugin(schema_name_resolver=resolver)]
 )
 
-scrapper = scrape.Scrape()
+scrapper = scrape.Scrape({}, '/scrape')
 
 class PaginationSchema(Schema):
     nextUrl = fields.Str(metadata={"description": "URL to call for the next page, only available if next is available"})

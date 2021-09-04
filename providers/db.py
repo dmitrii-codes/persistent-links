@@ -69,10 +69,11 @@ class DB:
         if 'query' in options and 'parameter' in options:
             parameters = tuple(options['parameter'])
 
+        pgn = self.pagination(sql.format('count(*) as total'), parameters)
+
         if 'limit' in options:
             sql += " limit {0}, {1}".format(*options['limit'])
 
-        pgn = self.pagination(sql.format('count(*) as total'), parameters)
 
 
         if 'fields' in options:

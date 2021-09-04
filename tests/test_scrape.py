@@ -1,4 +1,5 @@
 import unittest
+import ast
 from unittest.mock import MagicMock
 from controllers.scrape import Scrape
 from models.scrape import scrape as scp_model
@@ -33,7 +34,7 @@ class test_scrape(unittest.TestCase):
             'parent': self.database_content['parent_url_id']
         })
         scrape_list = self.scrape.list()
-        self.assertEqual(scrape_list.data['id'], self.database_content['url_id'])
+        self.assertEqual(ast.literal_eval(scrape_list.data)['id'], self.database_content['url_id'])
 
     def test_list_empty_value(self):
         self.scrape.get_model = scp_model

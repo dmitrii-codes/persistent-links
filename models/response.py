@@ -4,3 +4,4 @@ class response:
     data = None
     msg = None
     status = None
+    statusCode = 200
