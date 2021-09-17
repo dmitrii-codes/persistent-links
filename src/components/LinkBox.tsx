@@ -1,12 +1,20 @@
 import React from "react";
 import { TextField } from "@fluentui/react/lib/TextField";
-import { useHistory } from "react-router-dom";
 import { ConfirmationPageProps } from "../views/CreateConfirmation";
+import { useHistory } from "react-router-dom";
+import { mainScrapperUrl } from "../config/endpoints";
+import axios from "axios";
+
+function isValidUrl(url: string): boolean {
+    const expression = /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
+    return Array.isArray(url.match(new RegExp(expression)));
+}
 
 const LinkBox = () => {
-    const [LinkUrl, setLinkUrl] = React.useState("");
-    const history = useHistory<ConfirmationPageProps>();
+    const [linkUrl, setLinkUrl] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
 
+    const history = useHistory<ConfirmationPageProps>();
     const navigateToConfirmation = (
         generatedUrl: string,
         errorMessage?: string
@@ -16,23 +24,45 @@ const LinkBox = () => {
         <form
             className="linkbox"
             onSubmit={(event) => {
-                // TODO: add validations
                 event.preventDefault();
-                Promise.resolve()
-                    // TODO: call an api to scrape
-                    .then(() => {
-                        // on success
-                        navigateToConfirmation(
-                            "http://localhost:3000/scrappedandhashed"
+
+                // TODO: add the loading indicator
+                if (isValidUrl(linkUrl)) {
+                    setErrorMessage("");
+                    // TODO: enable CORS
+                    axios
+                        .post(
+                            `${mainScrapperUrl}/dev`,
+                            {
+                                url: linkUrl,
+                            }
+                        )
+                        .then((result) => {
+                            console.log(result);
+                            if (result.status === 200) {
+                                navigateToConfirmation(result.data);
+                            } else {
+                                navigateToConfirmation("", result.statusText);
+                            }
+                        })
+                        .catch((error) =>
+                            navigateToConfirmation("", error.message)
                         );
-                    })
-                    .catch((error) => navigateToConfirmation("", error));
+                } else {
+                    setErrorMessage(
+                        "The URL is invalid. Please verify your input."
+                    );
+                }
             }}
         >
             <TextField
                 label={"Link to preserve:"}
-                value={LinkUrl}
-                onChange={(_, value) => setLinkUrl(value || "")}
+                value={linkUrl}
+                errorMessage={errorMessage}
+                onChange={(_, value) => {
+                    errorMessage && isValidUrl(linkUrl) && setErrorMessage("");
+                    setLinkUrl(value || "");
+                }}
                 underlined
             />
         </form>
