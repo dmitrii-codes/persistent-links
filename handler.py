@@ -6,6 +6,7 @@ def handler(event, context):
     page = 1
     id = None
     url = None
+    s_url = None
 
     response = None
 
@@ -15,10 +16,13 @@ def handler(event, context):
     if 'queryStringParameters' in event and event['queryStringParameters'] is not None and 'url' in event['queryStringParameters']:
         url = event['queryStringParameters']['url']
 
+    if 'queryStringParameters' in event and event['queryStringParameters'] is not None and 'surl' in event['queryStringParameters']:
+        s_url = event['queryStringParameters']['surl']
+
     if 'pathParameters' in event and event['pathParameters'] is not None and 'id' in event['pathParameters']:
         id = event['pathParameters']['id']
 
-    contlr = Scrape({'id': id, 'page': page, 'url': url}, '/scrape/')
+    contlr = Scrape({'id': id, 'page': page, 'url': url, 'surl': s_url}, '/scrape/')
 
     if id is not None:
         response = contlr.list()
@@ -35,10 +39,5 @@ def handler(event, context):
 
 print(handler(
     {
-        'httpMethod': 'GET',
-            'queryStringParameters': {
-                'url': 'https://google.com',
-                'page': '2'
-            }
-
+        'httpMethod': 'GET'
     }, {}))
