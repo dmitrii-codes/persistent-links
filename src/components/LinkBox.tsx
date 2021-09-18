@@ -56,14 +56,14 @@ const LinkBox = () => {
             }}
         >
             <TextField
-                label={"Link to preserve:"}
                 value={linkUrl}
                 errorMessage={errorMessage}
                 onChange={(_, value) => {
                     errorMessage && isValidUrl(linkUrl) && setErrorMessage("");
                     setLinkUrl(value || "");
                 }}
-                underlined
+                placeholder="Enter link here to generate PermaLink"
+                borderless
             />
         </form>
     );
