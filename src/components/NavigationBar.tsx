@@ -18,16 +18,16 @@ const NavigationBar = (props: NavigationBarProps) => {
         <header>
             <nav
                 className="navbar navbar-expand-lg navbar-light"
-                style={{ backgroundColor: "#aaaaaa" }}
+                style={{ backgroundColor: "#FFFFFF" }}
             >
-                <FolderLink48Filled className="mr-3"></FolderLink48Filled>
+                <FolderLink48Filled className="mr-3 navbar_icon"></FolderLink48Filled>
                 <Link
                     className={`navbar-brand ${
                         props.activePage === NavBarPage.Home && "active"
                     }`}
                     to="/"
                 >
-                    Persistent Links
+                    PermaLink
                 </Link>
                 <button
                     className="navbar-toggler"
