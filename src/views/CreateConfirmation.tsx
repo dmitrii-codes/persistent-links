@@ -22,20 +22,30 @@ const CreateConfirmation = (
     return (
         <div className="home">
             <NavigationBar activePage={NavBarPage.Home} />
-            <div className="linkbox">
-                <Label className={`${errorMessage && "text-danger"}`}>
-                    {errorMessage ||
-                        "The link was successfully preserved and now can be shared"}
-                </Label>
-                {!errorMessage && (
-                    <TextField value={generatedUrl} readOnly></TextField>
-                )}
-                <DefaultButton
-                    text={errorMessage ? "Try again" : "Copy"}
-                    onClick={() => {
-                        errorMessage ? history.push("/") : copyUrl();
-                    }}
-                />
+            <div className="main_body">
+                <div className="content">
+                    <div className="linkbox">
+                        <Label className={`${errorMessage && "text-danger"}`}>
+                            {errorMessage ||
+                                "The link was successfully preserved and now can be shared"}
+                        </Label>
+                        {!errorMessage && (
+                            <TextField value={generatedUrl} readOnly></TextField>
+                        )}
+                        <div className="copybutton">
+                            <DefaultButton
+                                className="btn btn-primary"
+                                text={errorMessage ? "Try again" : "Copy"}
+                                onClick={() => {
+                                    errorMessage ? history.push("/") : copyUrl();
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="footer">
+                PermaLink was created for the UoL BSc Computer Science course CM2020: Agile Software Projects, by Team 6, Tutor Group 2 (J Batty, S Dattatreya, C Ojiba, I Sheresh, D Vasilev). All rights reserved.
             </div>
         </div>
     );

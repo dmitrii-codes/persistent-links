@@ -44,22 +44,22 @@ const NavigationBar = (props: NavigationBarProps) => {
                     <ul className="navbar-nav mr-auto">
                         <li
                             className={`nav-item ${
-                                props.activePage === NavBarPage.HowItWorks &&
-                                "active"
-                            }`}
-                        >
-                            <Link className="nav-link" to="/how-it-works">
-                                How It Works
-                            </Link>
-                        </li>
-                        <li
-                            className={`nav-item ${
                                 props.activePage === NavBarPage.About &&
                                 "active"
                             }`}
                         >
                             <Link className="nav-link" to={"/about"}>
                                 About
+                            </Link>
+                        </li>
+                        <li
+                            className={`nav-item ${
+                                props.activePage === NavBarPage.HowItWorks &&
+                                "active"
+                            }`}
+                        >
+                            <Link className="nav-link" to="/how-it-works">
+                                How It Works
                             </Link>
                         </li>
                     </ul>
