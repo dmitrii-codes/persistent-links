@@ -18,16 +18,16 @@ const NavigationBar = (props: NavigationBarProps) => {
         <header>
             <nav
                 className="navbar navbar-expand-lg navbar-light"
-                style={{ backgroundColor: "#aaaaaa" }}
+                style={{ backgroundColor: "#FFFFFF" }}
             >
-                <FolderLink48Filled className="mr-3"></FolderLink48Filled>
+                <FolderLink48Filled className="mr-3 navbar_icon"></FolderLink48Filled>
                 <Link
                     className={`navbar-brand ${
                         props.activePage === NavBarPage.Home && "active"
                     }`}
                     to="/"
                 >
-                    Persistent Links
+                    PermaLink
                 </Link>
                 <button
                     className="navbar-toggler"
@@ -44,22 +44,22 @@ const NavigationBar = (props: NavigationBarProps) => {
                     <ul className="navbar-nav mr-auto">
                         <li
                             className={`nav-item ${
-                                props.activePage === NavBarPage.HowItWorks &&
-                                "active"
-                            }`}
-                        >
-                            <Link className="nav-link" to="/how-it-works">
-                                How It Works
-                            </Link>
-                        </li>
-                        <li
-                            className={`nav-item ${
                                 props.activePage === NavBarPage.About &&
                                 "active"
                             }`}
                         >
                             <Link className="nav-link" to={"/about"}>
                                 About
+                            </Link>
+                        </li>
+                        <li
+                            className={`nav-item ${
+                                props.activePage === NavBarPage.HowItWorks &&
+                                "active"
+                            }`}
+                        >
+                            <Link className="nav-link" to="/how-it-works">
+                                How It Works
                             </Link>
                         </li>
                     </ul>

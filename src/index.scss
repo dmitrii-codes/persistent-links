@@ -1,20 +1,17 @@
 body {
   margin: 0;
-  font-family: -apple-system, "monospace", BlinkMacSystemFont, 'Playfair Display', serif, "Open Sans", "Roboto",
-      "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-      sans-serif;
-  font-weight: 600;
-  font-size: 1.3em;
+  font-weight: 400;
+  font-size: 1em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body::after {
-  background: url("static/img/abstract-link.jpg") no-repeat top center;
+  background: url("static/img/background.jpg") no-repeat top center;
   background-size: cover;
   height: 100vh;
   content: "";
-  opacity: 0.3;
+  opacity: 1.0;
   top: 0;
   left: 0;
   bottom: 0;
@@ -23,18 +20,123 @@ body::after {
   z-index: -1;
 }
 
+.navbar_icon {
+  color: #165565;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
+.main_body {
+  flex: 1;
+  display: flex;
+  margin-top: 30vh;
+  flex-direction: column;
+}
+
+.link_input {
+  display: flex;
+  background-color: #FFFFFF;
+  align-items: center;
+  border: 4px solid #1C687D;
+  height: 75px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  width: 75vw;
+  margin: 0 auto;
+  margin-top: 40px;
+  max-width: 700px;
+}
+
+.link_input .icons {
+  color: gray;
+  transform: scale(1.2);
+}
+
 .linkbox {
-  position: relative;
-  top: 40vh;
-  left: 30%;
-  width: 40%;
+  flex: 1;
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+}
+
+.submitbutton {
+  margin-top: 2vh;
+  text-align: center;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:active:focus, .btn-primary:focus, .btn-primary:visited {
+  background-color: #1C687D !important;
+  border-width: 0 !important;
+  border-radius: 999px !important;
+  width: 12vw !important;
+  min-width: 150px !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.copybutton {
+  margin-top: 1vh;
 }
 
 .recent-links {
   position: relative;
+}
+
+.footer {
+  position: fixed;
+  margin-top: auto;
+  padding: 5px;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 30px;
+  background-color: #FFFFFF;
+  text-align: center;
+  color: gray;
+  font-weight: 200;
+  font-size: 0.8em;
+}
+
+.content {
+  margin: auto;
+  margin-top: 2vh;
+  padding-top: 15px;
+  padding-left: 25px;
+  padding-bottom: 10px;
+  padding-right: 25px;
+  width: 75%;
+  align-self: center;
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  opacity: 0.85;
+}
+
+.navbar-brand {
+  color: #165565 !important;
+  font-weight: 650;
+}
+
+
+.headshot {
+  width: 125px;
+  height: 125px;
+  margin-left: auto;
+  margin-right: 3vw;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: gray;
+  -webkit-filter: grayscale(1);
+}
+
+.headshot:hover {
+  filter: none;
+  -webkit-filter: grayscale(0);
+}
+
+.tutorial {
+  max-height: 350px;
+  width: auto;
 }

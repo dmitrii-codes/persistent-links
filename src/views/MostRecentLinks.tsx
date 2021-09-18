@@ -147,15 +147,21 @@ const MostRecentLinks = () => {
     return (
         <div className="home">
             <NavigationBar activePage={NavBarPage.MostRecent} />
-            <Text className="mx-auto">100 most recent requests</Text>
-            <DetailsList
-                className={"recent-links"}
-                compact={true}
-                items={items}
-                columns={columns}
-                selectionMode={SelectionMode.none}
-                layoutMode={DetailsListLayoutMode.justified}
-            />
+
+            <div className="content">
+                <Text className="mx-auto">Below are the 100 sites most recently archived with PermaLink...</Text>
+                <DetailsList
+                    className={"recent-links"}
+                    compact={true}
+                    items={items}
+                    columns={columns}
+                    selectionMode={SelectionMode.none}
+                    layoutMode={DetailsListLayoutMode.justified}
+                />
+            </div>
+            <div className="footer">
+                PermaLink was created for the UoL BSc Computer Science course CM2020: Agile Software Projects, by Team 6, Tutor Group 2 (J Batty, S Dattatreya, C Ojiba, I Sheresh, D Vasilev). All rights reserved.
+            </div>
         </div>
     );
 };
