@@ -146,12 +146,21 @@ class Scrape(object):
 
 
             model = self.get_model()
+
+            query = ''
             page_number = int(self.event['page']) if 'page' in self.event and self.event['page'] is not None else 1
+            parameters = [ '%' + self.event['url'] + '%'] if 'url' in self.event and self.event['url'] is not None else []
+
+            query += ' LEFT JOIN url u on a.url_id=u.id WHERE u.url like %s' if 'url' in self.event and self.event['url'] is not None else ' LEFT JOIN url u on a.url_id=u.id'
+
+            if 'surl' in self.event and self.event['surl'] is not None:
+                query += " or a.url_shorten = %s" if 'WHERE' in query else " WHERE a.url_shorten = %s"
+                parameters.append(self.event['surl'])
             model_list = model.lists({
-                'query': ' LEFT JOIN url u on a.url_id=u.id WHERE u.url like %s' if 'url' in self.event and self.event['url'] is not None else ' LEFT JOIN url u on a.url_id=u.id' ,
-                'fields': 'a.url_shorten, a.url_content, UNiX_TIMESTAMP(a.url_timestamp) as url_timestamp,u.url, a.id as url_id, u.id as parent_url_id',
+                'query': query,
+                'fields': 'a.url_shorten, a.url_content, DATE_FORMAT(a.url_timestamp, \'%Y-%m-%d %T.%f\') as url_timestamp,u.url, a.id as url_id, u.id as parent_url_id',
                 'limit': [(page_number - 1) * model_pagination.limit, model_pagination.limit],
-                'parameter':  [ '%' + self.event['url'] + '%'] if 'url' in self.event and self.event['url'] is not None else []
+                'parameter':  parameters
             })
             response.data = model_list[1]
 
@@ -233,9 +242,10 @@ class Scrape(object):
                 response.statusCode = 400
                 raise ValueError('Value URL id is required')
 
+
             response.data = model.list({
                 'query': ' LEFT JOIN url u on a.url_id=u.id WHERE a.id = %s',
-                'fields': 'a.url_shorten, a.url_content, UNIX_TIMESTAMP(a.url_timestamp) as url_timestamp,u.url, a.id as url_id, u.id as parent_url_id',
+                'fields': 'a.url_shorten, a.url_content, DATE_FORMAT(a.url_timestamp, \'%Y-%m-%d %T.%f\') as url_timestamp,u.url, a.id as url_id, u.id as parent_url_id',
                 'parameter': [self.event['id']]
             })
 
