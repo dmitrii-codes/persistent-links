@@ -122,6 +122,7 @@ const MostRecentLinks = () => {
 
     React.useEffect(() => {
         fetchLinks(`${scrapeHistoryUrl}/scrape`, false);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const columns: IColumn[] = [
