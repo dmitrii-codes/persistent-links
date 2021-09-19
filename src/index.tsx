@@ -6,6 +6,7 @@ import About from "./views/About";
 import MostRecentLinks from "./views/MostRecentLinks";
 import CreateConfirmation from "./views/CreateConfirmation";
 import HowItWorks from "./views/HowItWorks";
+import Browse from "./views/Browse";
 import { BrowserRouter, Route } from "react-router-dom";
 import { loadTheme } from "@fluentui/react/lib";
 import "./index.scss";
@@ -39,7 +40,6 @@ const App = () => {
     });
 
     return (
-        // TODO: route for the scrapped html
         <BrowserRouter>
             <div>
                 <Route path="/" exact component={Home}></Route>
@@ -59,6 +59,7 @@ const App = () => {
                     exact
                     component={CreateConfirmation}
                 ></Route>
+                <Route path="/saved" component={Browse}></Route>
             </div>
         </BrowserRouter>
     );

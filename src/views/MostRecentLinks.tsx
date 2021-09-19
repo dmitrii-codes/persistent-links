@@ -2,7 +2,8 @@ import React from "react";
 import axios from "axios";
 import NavigationBar from "../components/NavigationBar";
 import { NavBarPage } from "../components/NavigationBar";
-import { scrapeHistoryUrl } from "../config/endpoints";
+import Footer from "../components/Footer";
+import { scrapeHistoryUrl, origin } from "../config/endpoints";
 import { Link } from "react-router-dom";
 import {
     DetailsList,
@@ -11,6 +12,9 @@ import {
     SelectionMode,
 } from "@fluentui/react/lib/DetailsList";
 import { Text } from "@fluentui/react/lib/Text";
+import { Callout, DirectionalHint } from "@fluentui/react/lib/Callout";
+import { mergeStyleSets } from "@fluentui/merge-styles";
+import { FontWeights } from "@fluentui/style-utilities";
 
 interface ScrapeHistoryPayload {
     data: {
@@ -31,6 +35,67 @@ interface LinkItem {
 const MostRecentLinks = () => {
     const fetchedItems: LinkItem[] = [];
     const [items, setItems] = React.useState<Array<LinkItem>>([]);
+    const [isCalloutVisible, setCalloutVisible] = React.useState<number>(-1);
+
+    const styles = mergeStyleSets({
+        callout: {
+            width: 320,
+            padding: "20px 24px",
+        },
+        title: {
+            marginBottom: 12,
+            fontWeight: FontWeights.semilight,
+        },
+        link: {
+            display: "block",
+            marginTop: 20,
+        },
+    });
+
+    const showCallout = (item: LinkItem, index: number) => {
+        const title = "Hey, I just archived the link! ";
+        const message = `PermaLink made a record of the following website "${
+            item.original
+        }" in its original state on ${item.date.toLocaleString()}. Check it out at ${
+            item.stored
+        }.`;
+        return (
+            <Callout
+                ariaLabelledBy="share callout"
+                ariaDescribedBy="callout with sharable info"
+                className={styles.callout}
+                target={`#share-${index}`}
+                isBeakVisible={true}
+                beakWidth={10}
+                onDismiss={() => setCalloutVisible(-1)}
+                directionalHint={DirectionalHint.leftCenter}
+                setInitialFocus
+            >
+                <Text
+                    block
+                    variant="xLarge"
+                    className={styles.title}
+                    id={`label-${index}`}
+                >
+                    {title}
+                </Text>
+                <Text block variant="small" id={`description-${index}`}>
+                    {message}
+                </Text>
+                <Link
+                    target="_blank"
+                    to=""
+                    className={styles.link}
+                    onClick={(event) => {
+                        event.preventDefault();
+                        copy(title + message.replace(/<[^>]*>?/gm, ""));
+                    }}
+                >
+                    Copy
+                </Link>
+            </Callout>
+        );
+    };
 
     const fetchLinks = (url: string, pagination: boolean) => {
         axios(url).then((result) => {
@@ -74,7 +139,7 @@ const MostRecentLinks = () => {
             key: "stored",
             name: "Stored URL",
             flexGrow: 1,
-            minWidth: 250,
+            minWidth: 300,
             isResizable: true,
             onRender: (item: LinkItem) => (
                 <Link to={item.stored}>{item.stored}</Link>
@@ -94,11 +159,12 @@ const MostRecentLinks = () => {
             flexGrow: 1,
             minWidth: 200,
             isResizable: true,
-            onRender: (item: LinkItem, _index) => {
+            onRender: (item: LinkItem, index: number | undefined) => {
                 return (
                     <>
                         <Link
                             className="mr-2"
+                            target="_blank"
                             to=""
                             onClick={(event) => {
                                 event.preventDefault();
@@ -107,11 +173,21 @@ const MostRecentLinks = () => {
                         >
                             copy
                         </Link>
-                        {
-                            // TODO: finish share
-                        }
-                        <Link className="mr-2" to="">
+                        <Link
+                            className="mr-2"
+                            target="_blank"
+                            to=""
+                            id={`share-${index}`}
+                            onClick={(event) => {
+                                event.preventDefault();
+                                setCalloutVisible(
+                                    typeof index === "number" ? index : -1
+                                );
+                            }}
+                        >
                             share
+                            {isCalloutVisible === index &&
+                                showCallout(item, index)}
                         </Link>
                         <Link to={{ pathname: item.stored }} target="_blank">
                             open
@@ -127,13 +203,12 @@ const MostRecentLinks = () => {
         pagination: boolean
     ) => {
         const listLink: LinkItem[] = [];
-
         linkItems?.data.forEach((linkItem) => {
             listLink.push({
                 id: linkItem.id,
                 date: new Date(linkItem.timestamp),
                 original: linkItem.url,
-                stored: linkItem.path,
+                stored: `${origin}/saved/${linkItem.path}`,
             });
         });
 
@@ -149,7 +224,10 @@ const MostRecentLinks = () => {
             <NavigationBar activePage={NavBarPage.MostRecent} />
 
             <div className="content">
-                <Text className="mx-auto">Below are the 100 sites most recently archived with PermaLink...</Text>
+                <Text className="mx-auto disable-select">
+                    Below are the 100 sites most recently archived with
+                    PermaLink
+                </Text>
                 <DetailsList
                     className={"recent-links"}
                     compact={true}
@@ -159,9 +237,7 @@ const MostRecentLinks = () => {
                     layoutMode={DetailsListLayoutMode.justified}
                 />
             </div>
-            <div className="footer">
-                PermaLink was created for the UoL BSc Computer Science course CM2020: Agile Software Projects, by Team 6, Tutor Group 2 (J Batty, S Dattatreya, C Ojiba, I Sheresh, D Vasilev). All rights reserved.
-            </div>
+            <Footer />
         </div>
     );
 };

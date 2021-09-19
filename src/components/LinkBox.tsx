@@ -2,17 +2,18 @@ import React from "react";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { ConfirmationPageProps } from "../views/CreateConfirmation";
 import { useHistory } from "react-router-dom";
-import { mainScrapperUrl } from "../config/endpoints";
+import { mainScrapperUrl, origin } from "../config/endpoints";
 import axios from "axios";
-import { LinkSquare24Regular, Save24Regular} from "@fluentui/react-icons";
+import { LinkSquare24Regular } from "@fluentui/react-icons";
 
 function isValidUrl(url: string): boolean {
-    const expression = /[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)?/gi;
+    const expression = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/gi;
     return Array.isArray(url.match(new RegExp(expression)));
 }
 
 const LinkBox = () => {
     const [linkUrl, setLinkUrl] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
     const [errorMessage, setErrorMessage] = React.useState("");
 
     const history = useHistory<ConfirmationPageProps>();
@@ -22,59 +23,80 @@ const LinkBox = () => {
     ) => history.push("/create-confirmation", { generatedUrl, errorMessage });
 
     return (
-            <form
-                className="linkbox"
-                onSubmit={(event) => {
-                    event.preventDefault();
-
-                    // TODO: add the loading indicator
-                    if (isValidUrl(linkUrl)) {
-                        setErrorMessage("");
-                        // TODO: enable CORS
-                        axios
-                            .post(
-                                `${mainScrapperUrl}/dev`,
-                                {
-                                    url: linkUrl,
-                                }
-                            )
-                            .then((result) => {
-                                console.log(result);
-                                if (result.status === 200) {
-                                    navigateToConfirmation(result.data);
+        <form
+            className="linkbox"
+            onSubmit={(event) => {
+                event.preventDefault();
+                if (isValidUrl(linkUrl)) {
+                    setErrorMessage("");
+                    setLoading(true);
+                    axios
+                        .post<{ data: { url: string }; errorMessage?: string }>(
+                            `${mainScrapperUrl}/dev`,
+                            {
+                                url: linkUrl,
+                            }
+                        )
+                        .then((result) => {
+                            setLoading(false);
+                            console.log(result);
+                            // fix the api that might return an error along with 200 OK
+                            if (result.status === 200) {
+                                if (!result.data?.errorMessage) {
+                                    navigateToConfirmation(
+                                        `${origin}/saved/${result.data.data.url}`
+                                    );
                                 } else {
-                                    navigateToConfirmation("", result.statusText);
+                                    navigateToConfirmation(
+                                        "",
+                                        result.data?.errorMessage ||
+                                            "Unknown error. Please try again later."
+                                    );
                                 }
-                            })
-                            .catch((error) =>
-                                navigateToConfirmation("", error.message)
-                            );
-                    } else {
-                        setErrorMessage(
-                            "The URL is invalid. Please verify your input."
+                            } else {
+                                navigateToConfirmation("", result.statusText);
+                            }
+                        })
+                        .catch((error) =>
+                            navigateToConfirmation("", error.message)
                         );
-                    }
-                }}
-            >
-                <div className="link_input">
+                } else {
+                    setErrorMessage(
+                        "The URL is invalid. Make sure you include the protocol."
+                    );
+                }
+            }}
+        >
+            {loading ? (
+                <div className="lds-ripple disable-select">
+                    <div></div>
+                    <div></div>
+                </div>
+            ) : (
+                <div className="link-input disable-select">
                     <TextField
-                        className="linkbox"
+                        className="linkbox col-"
                         value={linkUrl}
                         errorMessage={errorMessage}
                         onChange={(_, value) => {
-                            errorMessage && isValidUrl(linkUrl) && setErrorMessage("");
+                            errorMessage &&
+                                isValidUrl(linkUrl) &&
+                                setErrorMessage("");
                             setLinkUrl(value || "");
                         }}
-                        placeholder="Enter website URL here..."
+                        underlined
+                        placeholder={"http://www.persistentlinks.online/"}
                         borderless
                     />
-                    <LinkSquare24Regular className="mr-3 icons"></LinkSquare24Regular>
+                    <LinkSquare24Regular className="mr-3 icons hide"></LinkSquare24Regular>
+                    <div className="submit-button">
+                        <button type="submit" className="btn btn-primary">
+                            Generate PermaLink
+                        </button>
+                    </div>
                 </div>
-                <div className="submitbutton">
-                    <button type="submit" className="btn btn-primary">Generate PermaLink</button>
-                </div>
-            </form>
-
+            )}
+        </form>
     );
 };
 

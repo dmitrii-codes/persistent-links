@@ -1,6 +1,7 @@
 import React from "react";
 import NavigationBar from "../components/NavigationBar";
 import { NavBarPage } from "../components/NavigationBar";
+import Footer from "../components/Footer";
 import { RouteComponentProps } from "react-router-dom";
 import { TextField } from "@fluentui/react/lib/TextField";
 import { Label } from "@fluentui/react/lib/Label";
@@ -22,31 +23,38 @@ const CreateConfirmation = (
     return (
         <div className="home">
             <NavigationBar activePage={NavBarPage.Home} />
-            <div className="main_body">
+            <div className="main-body">
                 <div className="content">
-                    <div className="linkbox">
-                        <Label className={`${errorMessage && "text-danger"}`}>
+                    <div className="linkbox disable-select">
+                        <Label
+                            className={`disable-select ${
+                                errorMessage && "text-danger"
+                            }`}
+                        >
                             {errorMessage ||
                                 "The link was successfully preserved and now can be shared"}
                         </Label>
                         {!errorMessage && (
-                            <TextField value={generatedUrl} readOnly></TextField>
+                            <TextField
+                                value={generatedUrl}
+                                readOnly
+                            ></TextField>
                         )}
-                        <div className="copybutton">
+                        <div className="copy-button">
                             <DefaultButton
                                 className="btn btn-primary"
                                 text={errorMessage ? "Try again" : "Copy"}
                                 onClick={() => {
-                                    errorMessage ? history.push("/") : copyUrl();
+                                    errorMessage
+                                        ? history.push("/")
+                                        : copyUrl();
                                 }}
                             />
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="footer">
-                PermaLink was created for the UoL BSc Computer Science course CM2020: Agile Software Projects, by Team 6, Tutor Group 2 (J Batty, S Dattatreya, C Ojiba, I Sheresh, D Vasilev). All rights reserved.
-            </div>
+            <Footer />
         </div>
     );
 };
