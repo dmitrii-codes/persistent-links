@@ -32,12 +32,10 @@ def handler(event, context):
         response = contlr.create()
 
     return {
+        'headers' : {
+            'Access-Control-Allow-Origin': '*',
+            
+        },
         'statusCode': response.statusCode,
         'body': json.dumps(response.__dict__)
     }
-
-
-print(handler(
-    {
-        'httpMethod': 'GET'
-    }, {}))
