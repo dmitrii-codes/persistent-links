@@ -7,6 +7,7 @@ class scrape(models):
     url = None
     parent = 0
     message = None
+    content_path = None
 
     @staticmethod
     def list(options=None, **kwargs):
@@ -40,6 +41,7 @@ class scrape(models):
         scraperClass.timestamp = scrap['url_timestamp']
         scraperClass.url = scrap['url']
         scraperClass.parent = scrap['parent_url_id']
+        scraperClass.content_path = scrap['url_content']
         return scraperClass.__dict__
 
 
