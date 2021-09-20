@@ -15,21 +15,20 @@ const Browse = () => {
     );
 
     React.useEffect(() => {
-        axios(`${scrapeHistoryUrl}/scrape?surl=${shortUrl}`).then((result) => {
-            console.log(result);
-            if (result.status === 200) {
-                const permaLink: {
-                    timestamp: string;
-                    url: string;
-                } = result.data?.data?.[0];
-                setSrc(
-                    // TODO: replace with real link!
-                    "***REMOVED***httpsenwikipediaorgwikiAcamptonectes.html"
-                );
-                setTimestamp(new Date(permaLink.timestamp));
-                setOriginalUrl(permaLink.url);
-            }
-        });
+        axios(`${scrapeHistoryUrl}/scrape?surl=${shortUrl}`)
+            .then((result) => {
+                if (result.status === 200) {
+                    const permaLink: {
+                        content_path: string;
+                        timestamp: string;
+                        url: string;
+                    } = result.data?.data?.[0];
+                    setSrc(permaLink.content_path);
+                    setTimestamp(new Date(permaLink.timestamp));
+                    setOriginalUrl(permaLink.url);
+                }
+            })
+            .catch((error) => alert(error));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
