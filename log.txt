@@ -1,0 +1,98 @@
+commit 95bdd3c1a06d50a34c55c98bbde84912fb4f7a93
+Author: GodSaveTheDucks <suhas@claire.ai>
+Date:   Mon Sep 20 02:41:10 2021 +0530
+
+    updated structure
+
+commit 9e1339ba1aba3c0b1405b525c7a0252a7f266ddc
+Author: GodSaveTheDucks <34424158+GodSaveTheDucks@users.noreply.github.com>
+Date:   Mon Sep 20 01:56:14 2021 +0530
+
+    Add files via upload
+
+commit a049f71f3a7c85ac0b3543a98723682a6c917073
+Author: GodSaveTheDucks <34424158+GodSaveTheDucks@users.noreply.github.com>
+Date:   Mon Sep 20 01:55:11 2021 +0530
+
+    Add files via upload
+
+commit 93cb6f74d53dd4122c53454abda2f84726f22f33
+Author: GodSaveTheDucks <34424158+GodSaveTheDucks@users.noreply.github.com>
+Date:   Mon Sep 20 01:54:14 2021 +0530
+
+    Update lambda_function.py
+
+commit 9ec31c4ecdf2bed071699a34df6a978d8858b94b
+Author: GodSaveTheDucks <34424158+GodSaveTheDucks@users.noreply.github.com>
+Date:   Mon Sep 20 01:52:48 2021 +0530
+
+    Add files via upload
+
+commit 8b16eb823d617fb0d4f1c32e3dd50600f71c682a
+Merge: 6ab8546 f81ecdf
+Author: GodSaveTheDucks <34424158+GodSaveTheDucks@users.noreply.github.com>
+Date:   Mon Sep 20 01:52:00 2021 +0530
+
+    Merge pull request #15 from dmitrii-codes/feature-documentation-database
+    
+    Feature documentation database
+
+commit f81ecdff5f615d5be3f67dfffe4f1aa4e1ff437d
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Sun Sep 19 21:13:47 2021 +0100
+
+    added content path
+
+commit d2f2805fcc64f447dce87d5b289b66897da51ef9
+Author: GodSaveTheDucks <34424158+GodSaveTheDucks@users.noreply.github.com>
+Date:   Mon Sep 20 01:37:00 2021 +0530
+
+    added headers
+
+commit 242a24d39e775857b02d5c1734f568507f8e5c5a
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Sat Sep 18 22:39:25 2021 +0100
+
+    Removed pycs
+
+commit d2d46a2a57a82b25ca5481ba142b814b1cc6a9c3
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Sat Sep 18 22:34:21 2021 +0100
+
+    Added extra query for short url
+
+commit 6ab8546b7fa56273782d0d0776bb1b08abd36a74
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Sat Sep 4 11:54:33 2021 +0100
+
+    Fixed series of problem with pagination
+
+commit 40d0840baad35f71768b1716b6ac131869aa5dae
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Sat Sep 4 10:59:24 2021 +0100
+
+    Updated implementation to support lambda deployment and added lambda support for request variables
+
+commit 5895f8672f36495d56c771abe516c5419f7da557
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Thu Sep 2 03:29:26 2021 +0100
+
+    Added test cases for list and lists endpoint
+
+commit 7e03cb8c4810238573877fb3ea92c91eb22f9c3a
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Fri Aug 20 00:18:39 2021 +0100
+
+    Added openapi yaml version
+
+commit a2277aba8628057bc5899ea62f961917380402ac
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Thu Aug 19 10:10:29 2021 +0100
+
+    Total must be integer
+
+commit 55fbdbceb2af2b879dff16f94ed69203a27e6b2a
+Author: martin chuka <martinchuka@gmail.com>
+Date:   Thu Aug 19 09:48:34 2021 +0100
+
+    Added doc and database
