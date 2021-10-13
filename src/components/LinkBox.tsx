@@ -85,7 +85,7 @@ const LinkBox = () => {
                             setLinkUrl(value || "");
                         }}
                         underlined
-                        placeholder={"http://www.persistentlinks.online/"}
+                        placeholder={"https://www.permalinks.org/"}
                         borderless
                     />
                     <LinkSquare24Regular className="mr-3 icons hide"></LinkSquare24Regular>

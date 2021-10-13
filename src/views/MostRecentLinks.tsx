@@ -133,7 +133,9 @@ const MostRecentLinks = () => {
             minWidth: 250,
             isResizable: true,
             onRender: (item: LinkItem) => (
-                <Link to={item.original}>{item.original}</Link>
+                <Link to={{ pathname: item.original }} target="_blank">
+                    {item.original}
+                </Link>
             ),
         },
         {
@@ -143,7 +145,9 @@ const MostRecentLinks = () => {
             minWidth: 300,
             isResizable: true,
             onRender: (item: LinkItem) => (
-                <Link to={item.stored}>{item.stored}</Link>
+                <Link to={{ pathname: item.stored }} target="_blank">
+                    {item.stored}
+                </Link>
             ),
         },
         {
