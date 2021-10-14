@@ -82,12 +82,10 @@ code {
 
 .recent-links {
   position: relative;
-  padding-bottom: 20px !important;
 }
 
 .footer {
   position: fixed;
-  margin-top: auto;
   padding: 5px;
   left: 0;
   bottom: 0;
@@ -111,6 +109,7 @@ code {
   background-color: #FFFFFF;
   border-radius: 20px;
   opacity: 0.85;
+  margin-bottom: 80px;
 }
 
 .navbar-brand {

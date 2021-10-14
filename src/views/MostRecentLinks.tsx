@@ -20,7 +20,7 @@ interface ScrapeHistoryPayload {
     data: {
         id: number;
         path: string;
-        timestamp: number;
+        timestamp: string;
         url: string;
     }[];
 }
@@ -99,7 +99,6 @@ const MostRecentLinks = () => {
 
     const fetchLinks = (url: string, pagination: boolean) => {
         axios(url).then((result) => {
-            console.log(result);
             if (result.status === 200) {
                 const payload: {
                     data: any[];
@@ -118,6 +117,28 @@ const MostRecentLinks = () => {
                 }
             }
         });
+    };
+
+    const processDate = (dateToProcess: string) => {
+        let date = new Date(dateToProcess);
+
+        // In case its iOS, parse the fulldate parts and re-create the date object.
+        if (Number.isNaN(date.getMonth())) {
+            try {
+                const splitDate = dateToProcess.split(/[- :]/);
+                date = new Date(
+                    parseInt(splitDate[0]),
+                    parseInt(splitDate[1]) - 1,
+                    parseInt(splitDate[2]),
+                    parseInt(splitDate[3]),
+                    parseInt(splitDate[4]),
+                    parseInt(splitDate[5])
+                );
+            } finally {
+            }
+        }
+
+        return date;
     };
 
     React.useEffect(() => {
@@ -156,7 +177,7 @@ const MostRecentLinks = () => {
             flexGrow: 1,
             minWidth: 200,
             isResizable: true,
-            onRender: (item: LinkItem) => new Date(item.date).toLocaleString(),
+            onRender: (item: LinkItem) => item.date.toLocaleString(),
         },
         {
             key: "copy",
@@ -211,7 +232,7 @@ const MostRecentLinks = () => {
         linkItems?.data.forEach((linkItem) => {
             listLink.push({
                 id: linkItem.id,
-                date: new Date(linkItem.timestamp),
+                date: processDate(linkItem.timestamp),
                 original: linkItem.url,
                 stored: `${origin}/saved/${linkItem.path}`,
             });

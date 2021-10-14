@@ -53,7 +53,7 @@ const Browse = () => {
                     margin: "0",
                     padding: "0",
                     overflow: "hidden",
-                    opacity: "0.9",
+                    opacity: "0.92",
                     background: "white",
                 }}
             ></iframe>

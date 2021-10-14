@@ -82,12 +82,6 @@ const HowItWorks = () => {
                     </div>
                 </div>
             </div>
-
-            <div className="container">
-                <p>&nbsp;</p>
-                <p>&nbsp;</p>
-            </div>
-
             <Footer />
         </div>
     );
