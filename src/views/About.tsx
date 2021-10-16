@@ -13,7 +13,7 @@ const About = () => {
         <div className="about">
             <NavigationBar activePage={NavBarPage.About} />
 
-            <div className="content">
+            <div className="content" style={{ marginBottom: 0 }}>
                 <h1 className="display-4">What is PermaLink?</h1>
                 <p className="lead">
                     PermaLink aims to combat link decay and content drift by
